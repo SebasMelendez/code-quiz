@@ -107,13 +107,14 @@ function results(){
   workingHeader.innerText = "Final Results:"
   questionItemEl.appendChild(questionEl)
   tasksToDoEl.append(questionItemEl);
-  create
   resultsScreen = true;
+  // debugger;
+  let taskActionsEl = createTaskActions(0,"results")
+  questionItemEl.appendChild(taskActionsEl);
 }
 
 // self explanatory
 function questions(){
-  // debugger;
 
   if (resultsScreen){
 
@@ -153,7 +154,7 @@ function questions(){
   questionItemEl.appendChild(questionEl)
   tasksToDoEl.append(questionItemEl);
 
-  let taskActionsEl = createTaskActions(index);
+  let taskActionsEl = createTaskActions(index,"questions");
   questionItemEl.appendChild(taskActionsEl);
 
  
@@ -164,20 +165,31 @@ function questions(){
   // console.log(questionBank.questions[index],questionBank.number[index],questionBank.answers[index])
 }
 
-let createTaskActions = function (index) {
+let createTaskActions = function (index, type) {
   // create container to hold elements
   let actionContainerEl = document.createElement("div");
   actionContainerEl.className = "task-actions";
 
+ if(type == "questions"){ //create all buttons in one loop
   let currentBank = shuffle(AnswerBank[index])
-
-  //create all buttons in one loop
   for (let i = 0; i < currentBank.length; i++) {
-    let answerButton = document.createElement("button");
-        answerButton.textContent = currentBank[i];
-        answerButton.className = "btn " +questionBank.letter[i]+ "-btn";
-        answerButton.setAttribute("data-task-id", index);
-        actionContainerEl.appendChild(answerButton);
+    let interactionButton = document.createElement("button");
+        interactionButton.textContent = currentBank[i];
+        interactionButton.className = "btn " +questionBank.letter[i]+ "-btn";
+        interactionButton.setAttribute("data-task-id", index);
+        actionContainerEl.appendChild(interactionButton);
+  }}
+  else if(type == "results"){
+    let playerRecord = document.createElement("input")
+    playerRecord.type = "text"
+    playerRecord.name = "name-field"
+    playerRecord.placeholder = "Enter your Name or Initials"
+    actionContainerEl.appendChild(playerRecord);
+    let interactionButton = document.createElement("button");
+    interactionButton.textContent = "Save";
+    interactionButton.className = "btn S-btn";
+    interactionButton.setAttribute("data-task-id", "results");
+    actionContainerEl.appendChild(interactionButton);
   }
   return actionContainerEl;
 };
