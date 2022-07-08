@@ -22,6 +22,7 @@ let startBtn = document.querySelector("#start-game")
 let time = document.querySelector("#timer")
 let qNumber = document.querySelector("#qNumber")
 var tasksToDoEl = document.querySelector("#tasks-to-do");
+var pageContentEl = document.querySelector("#page-content");
 
 function shuffle(array) {
   let currentIndex = array.length,  randomIndex;
@@ -70,6 +71,17 @@ function gameOver(){
 // self explanatory
 function questions(){
 
+
+  if(index > 0) {
+    debugger;
+    let prevIndex = index - 1;
+    console.log(".task-item[data-task-id='" + prevIndex + "']")
+    var taskSelected = document.querySelector(
+      ".task-item[data-task-id='" + prevIndex + "']"
+    );
+
+    taskSelected.remove();
+  }
   
   qNumber.innerText = questionBank.number[index]
   let questionItemEl = document.createElement("li");
@@ -78,12 +90,14 @@ function questions(){
 
   var questionEl = document.createElement("div");
   questionEl.className = "task-info";
-  questionEl.innerHTML ="<h3 class='task-name'>"+ questionBank.questions[index] +"</h3><span class='task-type'> doof </span>";
+  questionEl.innerHTML ="<h3 class='task-name'>"+ questionBank.questions[index] +
+  "</h3><span class='task-type'>Pick 1; Wrong answers loose you 10 seconds </span>";
   questionItemEl.appendChild(questionEl)
   tasksToDoEl.append(questionItemEl);
 
   var taskActionsEl = createTaskActions(index);
   questionItemEl.appendChild(taskActionsEl);
+
  
 
 
@@ -102,45 +116,54 @@ var createTaskActions = function (index) {
   // create edit button
   var answerAButton = document.createElement("button");
   answerAButton.textContent = currentBank[0];
-  answerAButton.className = "btn edit-btn";
+  answerAButton.className = "btn A-btn";
   answerAButton.setAttribute("data-task-id", index);
   actionContainerEl.appendChild(answerAButton);
   // create delete button
   var answerBButton = document.createElement("button");
   answerBButton.textContent = currentBank[1]
-  answerBButton.className = "btn delete-btn";
+  answerBButton.className = "btn B-btn";
   answerBButton.setAttribute("data-task-id", index);
   actionContainerEl.appendChild(answerBButton);
 
   var answerCButton = document.createElement("button");
   answerCButton.textContent = currentBank[2]
-  answerCButton.className = "btn delete-btn";
+  answerCButton.className = "btn C-btn";
   answerCButton.setAttribute("data-task-id", index);
   actionContainerEl.appendChild(answerCButton);
   
   var answerDButton = document.createElement("button");
   answerDButton.textContent = currentBank[3]
-  answerDButton.className = "btn delete-btn";
+  answerDButton.className = "btn D-btn";
   answerDButton.setAttribute("data-task-id", index);
   actionContainerEl.appendChild(answerDButton);
-  
-  // create status options
-  var statusChoices = ["To Do", "In Progress", "Completed"];
-
-  for (var i = 0; i < statusChoices.length; i++) {
-    // create option element
-    var statusOptionEl = document.createElement("option");
-    statusOptionEl.setAttribute("value", statusChoices[i]);
-    statusOptionEl.textContent = statusChoices[i];
-
-    // append to select
-
-  }
-
   return actionContainerEl;
 };
 
+var taskButtonHandler = function (event) {
+  // get target element from event
+  var targetEl = event.target;
+
+  console.log(targetEl);
+
+  if (targetEl.matches(".A-btn") || targetEl.matches(".B-btn") || targetEl.matches(".C-btn") || targetEl.matches(".D-btn")  ){
+    console.log("boop!")
+    questions()
+  }
+
+  // if (targetEl.matches(".edit-btn")) {
+  //   console.log("edit", targetEl);
+  //   var taskId = targetEl.getAttribute("data-task-id");
+  //   editTask(taskId);
+  // } else if (targetEl.matches(".delete-btn")) {
+  //   console.log("delete", targetEl);
+  //   var taskId = targetEl.getAttribute("data-task-id");
+  //   deleteTask(taskId);
+  // }
+};
+
 startBtn.addEventListener("click", startGame);
+pageContentEl.addEventListener("click", taskButtonHandler);
 
 
 
