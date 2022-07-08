@@ -217,7 +217,7 @@ function leaderboardsScreen(type){
   }
     
   
-  workingHeader.innerText = "Leaderboards"
+  workingHeader.innerText = " Leaderboards! (unranked)"
 
   for (let i = 0; i < namesArray.length; i++) {
     let questionItemEl = document.createElement("li");
@@ -271,6 +271,9 @@ let taskButtonHandler = function (event) {
 
   if(targetEl.matches(".S-btn")){
     let playerRecordValue = document.querySelector("input[name='name-field']").value;
+    if(!playerRecordValue){
+      playerRecordValue = "Guest"
+    }
     namesArray.push(playerRecordValue)
     scoresArray.push(score)
     leaderboards.user = namesArray;
