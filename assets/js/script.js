@@ -19,6 +19,13 @@ let AnswerBank = [
    ["Math.Random()", "Math.Floor()", "Math,Random()", "Math()"],
    ["The person playing this!", "Not this one!","Not this one!","Not this one!"]
 ]
+//high score object
+let leaderboards = {
+  user:[],
+  score:[]
+}
+
+
 //declare query selections
 let TopEl = document.querySelector("#top-bar");
 let startBtn = document.querySelector("#start-game")
@@ -45,6 +52,22 @@ function shuffle(array) {
   }
 
   return array;
+}
+
+function loadData (){
+  var savedTasks = localStorage.getItem("tasks");
+  // if there are no tasks, set tasks to an empty array and return out of the function
+  if (!savedTasks) {
+    return false;
+  }
+  console.log("Saved tasks found!");
+
+  leaderboards = JSON.parse(savedTasks)
+}
+
+function persistData(){
+    console.log(JSON.stringify(leaderboards))
+    localStorage.setItem("leaderboards", JSON.stringify(leaderboards));
 }
 
 //timer function
@@ -185,6 +208,7 @@ let createTaskActions = function (index, type) {
     playerRecord.name = "name-field"
     playerRecord.placeholder = "Enter your Name or Initials"
     actionContainerEl.appendChild(playerRecord);
+
     let interactionButton = document.createElement("button");
     interactionButton.textContent = "Save";
     interactionButton.className = "btn S-btn";
@@ -197,16 +221,21 @@ let createTaskActions = function (index, type) {
 let taskButtonHandler = function (event) {
   // get target element from event
   let targetEl = event.target;
+  
 
   console.log(targetEl);
 
-  if (targetEl.matches(".A-btn") || targetEl.matches(".B-btn") || targetEl.matches(".C-btn") || targetEl.matches(".D-btn")  ){
-    // debugger;
-    console
-    console.log(targetEl.textContent)
-    console.log(questionBank.answers[index])
+  if(targetEl.matches(".S-btn")){
+    let playerRecordValue = document.querySelector("input[name='name-field']").value;
+    leaderboards.user = playerRecordValue
+    leaderboards.score = score
+    persistData();
+
+  }
+
+    else if (targetEl.matches(".A-btn") || targetEl.matches(".B-btn") || targetEl.matches(".C-btn") || targetEl.matches(".D-btn")  ){
     if(targetEl.textContent == questionBank.answers[index]){
-      console.log("its a goal!")
+
       score++
       score = timer + score
       index ++
@@ -222,5 +251,8 @@ let taskButtonHandler = function (event) {
 };
 
 startBtn.addEventListener("click", startGame);
+
 pageContentEl.addEventListener("click", taskButtonHandler);
+
+loadData();
 
