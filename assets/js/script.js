@@ -1,17 +1,19 @@
-
-let time = document.querySelector("#timer")
-let qNumber = document.querySelector("#qNumber")
+//set all common working variables
 let interval;
 let index = 0;
 let timer = 60;
+// set questionBank object
 let questionBank = {
   questions: ["Which one of these logs content to the console?", "what does CSS stand for?", "which one shows a prompt for the user?", "which one would I  use to get a decimal bewteen 0 and 1?", "freebee: whos the best?"],
   number: [1,2,3,4,5],
   answers: ["console.log()", "Cascading Style Sheet", "window.prompt()", "Math.Random()", "The person playing this!"]
 }
-
+//declare query selections
 let TopEl = document.querySelector("#top-bar");
 let startBtn = document.querySelector("#start-game")
+let time = document.querySelector("#timer")
+let qNumber = document.querySelector("#qNumber")
+var tasksToDoEl = document.querySelector("#tasks-to-do");
 
 function updateTimer(){
   timer--;
@@ -29,12 +31,24 @@ function startGame(){
 }
 
 function gameOver(){
+  timer = 60;
   startBtn.disabled = false
   clearInterval(interval);
 }
 
 function questions(){
   qNumber.innerText = questionBank.number[index]
+  let questionItem = document.createElement("li");
+  questionItem.className = "task-item";
+
+  var questionEl = document.createElement("div");
+  questionEl.className = "task-info";
+  questionEl.innerHTML ="<h3 class='task-name'>"+ questionBank.questions[index] +"</h3><span class='task-type'> doof </span>";
+  questionItem.appendChild(questionEl)
+  tasksToDoEl.append(questionItem);
+ 
+
+
   console.log(questionBank.questions[index],questionBank.number[index],questionBank.answers[index])
   index ++
   console.log(questionBank.questions[index],questionBank.number[index],questionBank.answers[index])
