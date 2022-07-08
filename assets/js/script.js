@@ -32,6 +32,7 @@ let leaderboards = {
 //declare query selections
 let TopEl = document.querySelector("#top-bar");
 let startBtn = document.querySelector("#start-game")
+let leaderboardsBtn = document.querySelector("#show-leaderboards")
 let time = document.querySelector("#timer")
 let qNumber = document.querySelector("#qNumber")
 let tasksToDoEl = document.querySelector("#tasks-to-do");
@@ -58,7 +59,6 @@ function shuffle(array) {
 }
 
 function loadData (){
-  debugger;
   var savedTasks = localStorage.getItem("leaderboards");
   // if there are no tasks, set tasks to an empty array and return out of the function
   if (!savedTasks) {
@@ -67,8 +67,8 @@ function loadData (){
   console.log("Saved tasks found!");
 
   leaderboards = JSON.parse(savedTasks)
-  namesArray.push(leaderboards.user)
-  scoresArray.push(leaderboards.score)
+  namesArray = leaderboards.user
+  scoresArray = leaderboards.score
 }
 
 function persistData(){
@@ -118,7 +118,6 @@ function gameOver(){
 function reset(){
   timer = 60;
   index = 0;
-  startBtn.disabled = false
   time.innerText = "--"
 }
 
@@ -140,8 +139,6 @@ function results(){
   // debugger;
   let taskActionsEl = createTaskActions(0,"results")
   questionItemEl.appendChild(taskActionsEl);
-
-  leaderboardsScreen();
 }
 
 // self explanatory
@@ -196,18 +193,33 @@ function questions(){
   // console.log(questionBank.questions[index],questionBank.number[index],questionBank.answers[index])
 }
 
-function leaderboardsScreen(){
+function leaderboardsScreen(type){
   debugger;
+  
+  if(type == "results"){
+    let taskSelected = document.querySelector(
+      ".task-item[data-task-id='"+type+"']"
+    );
 
-  let questionItemEl = document.createElement("li");
+    taskSelected.remove();
+  }
+    
+  
+  workingHeader.innerText = "Leaderboards"
+
+  for (let i = 0; i < namesArray.length; i++) {
+    let questionItemEl = document.createElement("li");
   questionItemEl.className = "task-item";
   questionItemEl.setAttribute("data-task-id", leaderboards);
-
   let questionEl = document.createElement("div");
   questionEl.className = "task-info";
-  questionEl.innerHTML ="<h3 class='task-name'>Here are the leaderboards!</h3><span class='task-type'>Pick 1; Wrong answers loose you 10 seconds </span>";
+  questionEl.innerHTML ="<h3 class='task-name'>"+namesArray[i]+"</h3><span class='task-type'>"+scoresArray[i]+"</span>";
   questionItemEl.appendChild(questionEl)
   tasksToDoEl.append(questionItemEl);
+  }
+  
+
+  
 
 }
 
@@ -256,6 +268,7 @@ let taskButtonHandler = function (event) {
     leaderboards.user = namesArray;
     leaderboards.score = scoresArray;
     persistData();
+    leaderboardsScreen("results");
 
   }
 
@@ -277,6 +290,7 @@ let taskButtonHandler = function (event) {
 };
 
 startBtn.addEventListener("click", startGame);
+leaderboardsBtn.addEventListener("click", leaderboardsScreen);
 
 pageContentEl.addEventListener("click", taskButtonHandler);
 
