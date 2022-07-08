@@ -73,7 +73,7 @@ function loadData (){
 }
 
 function persistData(){
-    console.log(JSON.stringify(leaderboards))
+    // console.log(JSON.stringify(leaderboards))
     localStorage.setItem("leaderboards", JSON.stringify(leaderboards));
 }
 
@@ -106,7 +106,7 @@ function gameOver(){
   else{
     workingIndex = index
   }
-    console.log(".task-item[data-task-id='" + workingIndex + "']")
+    // console.log(".task-item[data-task-id='" + workingIndex + "']")
     let taskSelected = document.querySelector(
       ".task-item[data-task-id='" + workingIndex + "']"
     );
@@ -165,7 +165,7 @@ function questions(){
       leaderboardsRm = false;
     }
   } 
-  console.log(score)
+  // console.log(score)
   if(index > 4){
     gameOver()
     return false;
@@ -197,12 +197,6 @@ function questions(){
   let taskActionsEl = createTaskActions(index,"questions");
   questionItemEl.appendChild(taskActionsEl);
 
- 
-
-
-  // console.log(questionBank.questions[index],questionBank.number[index],questionBank.answers[index])
-  // index ++
-  // console.log(questionBank.questions[index],questionBank.number[index],questionBank.answers[index])
 }
 
 function leaderboardsScreen(type){ 
@@ -267,7 +261,7 @@ let taskButtonHandler = function (event) {
   let targetEl = event.target;
   
 
-  console.log(targetEl);
+  // console.log(targetEl);
 
   if(targetEl.matches(".S-btn")){
     let playerRecordValue = document.querySelector("input[name='name-field']").value;
