@@ -19,6 +19,9 @@ let AnswerBank = [
    ["Math.Random()", "Math.Floor()", "Math,Random()", "Math()"],
    ["The person playing this!", "Not this one!","Not this one!","Not this one!"]
 ]
+//Holding Arrays
+let namesArray = []
+let scoresArray = []
 //high score object
 let leaderboards = {
   user:[],
@@ -55,7 +58,8 @@ function shuffle(array) {
 }
 
 function loadData (){
-  var savedTasks = localStorage.getItem("tasks");
+  debugger;
+  var savedTasks = localStorage.getItem("leaderboards");
   // if there are no tasks, set tasks to an empty array and return out of the function
   if (!savedTasks) {
     return false;
@@ -63,6 +67,8 @@ function loadData (){
   console.log("Saved tasks found!");
 
   leaderboards = JSON.parse(savedTasks)
+  namesArray.push(leaderboards.user)
+  scoresArray.push(leaderboards.score)
 }
 
 function persistData(){
@@ -134,6 +140,8 @@ function results(){
   // debugger;
   let taskActionsEl = createTaskActions(0,"results")
   questionItemEl.appendChild(taskActionsEl);
+
+  leaderboardsScreen();
 }
 
 // self explanatory
@@ -188,6 +196,21 @@ function questions(){
   // console.log(questionBank.questions[index],questionBank.number[index],questionBank.answers[index])
 }
 
+function leaderboardsScreen(){
+  debugger;
+
+  let questionItemEl = document.createElement("li");
+  questionItemEl.className = "task-item";
+  questionItemEl.setAttribute("data-task-id", leaderboards);
+
+  let questionEl = document.createElement("div");
+  questionEl.className = "task-info";
+  questionEl.innerHTML ="<h3 class='task-name'>Here are the leaderboards!</h3><span class='task-type'>Pick 1; Wrong answers loose you 10 seconds </span>";
+  questionItemEl.appendChild(questionEl)
+  tasksToDoEl.append(questionItemEl);
+
+}
+
 let createTaskActions = function (index, type) {
   // create container to hold elements
   let actionContainerEl = document.createElement("div");
@@ -226,9 +249,12 @@ let taskButtonHandler = function (event) {
   console.log(targetEl);
 
   if(targetEl.matches(".S-btn")){
+    debugger;
     let playerRecordValue = document.querySelector("input[name='name-field']").value;
-    leaderboards.user = playerRecordValue
-    leaderboards.score = score
+    namesArray.push(playerRecordValue)
+    scoresArray.push(score)
+    leaderboards.user = namesArray;
+    leaderboards.score = scoresArray;
     persistData();
 
   }
