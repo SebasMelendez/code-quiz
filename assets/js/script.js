@@ -8,6 +8,14 @@ let questionBank = {
   number: [1,2,3,4,5],
   answers: ["console.log()", "Cascading Style Sheet", "window.prompt()", "Math.Random()", "The person playing this!"]
 }
+//set AnswerBank for each question
+let AnswerBank = [
+   ["console.log()", "console.dir()", "window.alert()", "Math.Random()"],
+   ["Cascading Style Sheet", "JavaScript Object Notation", "Asynchronous JavaScript And XML", "HyperText Markup Language"],
+   ["window.prompt()", "console.dir()", "window.alert()", "console.log()"],
+   ["Math.Random()", "Math.Floor()", "Math,Random()", "Math()"],
+   ["The person playing this!", "Not this one!","Not this one!","Not this one!"]
+]
 //declare query selections
 let TopEl = document.querySelector("#top-bar");
 let startBtn = document.querySelector("#start-game")
@@ -15,6 +23,25 @@ let time = document.querySelector("#timer")
 let qNumber = document.querySelector("#qNumber")
 var tasksToDoEl = document.querySelector("#tasks-to-do");
 
+function shuffle(array) {
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+
+//timer function
 function updateTimer(){
   timer--;
   time.innerText = timer
@@ -24,28 +51,39 @@ function updateTimer(){
   }
 }
 
+// start the interval for the timer function and game
 function startGame(){
   startBtn.disabled = true
   interval = setInterval(updateTimer, 1000);
   questions();
 }
 
+// /reset game so they can try again
 function gameOver(){
   timer = 60;
+  index = 0
   startBtn.disabled = false
   clearInterval(interval);
 }
 
+
+// self explanatory
 function questions(){
+
+  
   qNumber.innerText = questionBank.number[index]
-  let questionItem = document.createElement("li");
-  questionItem.className = "task-item";
+  let questionItemEl = document.createElement("li");
+  questionItemEl.className = "task-item";
+  questionItemEl.setAttribute("data-task-id", index);
 
   var questionEl = document.createElement("div");
   questionEl.className = "task-info";
   questionEl.innerHTML ="<h3 class='task-name'>"+ questionBank.questions[index] +"</h3><span class='task-type'> doof </span>";
-  questionItem.appendChild(questionEl)
-  tasksToDoEl.append(questionItem);
+  questionItemEl.appendChild(questionEl)
+  tasksToDoEl.append(questionItemEl);
+
+  var taskActionsEl = createTaskActions(index);
+  questionItemEl.appendChild(taskActionsEl);
  
 
 
@@ -53,6 +91,54 @@ function questions(){
   index ++
   console.log(questionBank.questions[index],questionBank.number[index],questionBank.answers[index])
 }
+
+var createTaskActions = function (index) {
+  // create container to hold elements
+  var actionContainerEl = document.createElement("div");
+  actionContainerEl.className = "task-actions";
+
+  let currentBank = shuffle(AnswerBank[index])
+
+  // create edit button
+  var answerAButton = document.createElement("button");
+  answerAButton.textContent = currentBank[0];
+  answerAButton.className = "btn edit-btn";
+  answerAButton.setAttribute("data-task-id", index);
+  actionContainerEl.appendChild(answerAButton);
+  // create delete button
+  var answerBButton = document.createElement("button");
+  answerBButton.textContent = currentBank[1]
+  answerBButton.className = "btn delete-btn";
+  answerBButton.setAttribute("data-task-id", index);
+  actionContainerEl.appendChild(answerBButton);
+
+  var answerCButton = document.createElement("button");
+  answerCButton.textContent = currentBank[2]
+  answerCButton.className = "btn delete-btn";
+  answerCButton.setAttribute("data-task-id", index);
+  actionContainerEl.appendChild(answerCButton);
+  
+  var answerDButton = document.createElement("button");
+  answerDButton.textContent = currentBank[3]
+  answerDButton.className = "btn delete-btn";
+  answerDButton.setAttribute("data-task-id", index);
+  actionContainerEl.appendChild(answerDButton);
+  
+  // create status options
+  var statusChoices = ["To Do", "In Progress", "Completed"];
+
+  for (var i = 0; i < statusChoices.length; i++) {
+    // create option element
+    var statusOptionEl = document.createElement("option");
+    statusOptionEl.setAttribute("value", statusChoices[i]);
+    statusOptionEl.textContent = statusChoices[i];
+
+    // append to select
+
+  }
+
+  return actionContainerEl;
+};
 
 startBtn.addEventListener("click", startGame);
 
