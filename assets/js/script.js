@@ -3,10 +3,12 @@ let interval;
 let index = 0;
 let timer = 60;
 let score= 0;
+let resultsScreen = false;
 // set questionBank object
 let questionBank = {
   questions: ["Which one of these logs content to the console?", "what does CSS stand for?", "which one shows a prompt for the user?", "which one would I  use to get a decimal bewteen 0 and 1?", "freebee: whos the best?"],
   number: [1,2,3,4,5],
+  letter: ["A", "B", "C", "D"],
   answers: ["console.log()", "Cascading Style Sheet", "window.prompt()", "Math.Random()", "The person playing this!"]
 }
 //set AnswerBank for each question
@@ -83,6 +85,7 @@ function gameOver(){
   results()
 }
 
+//reset all parameters for a new game
 function reset(){
   timer = 60;
   index = 0;
@@ -90,8 +93,9 @@ function reset(){
   time.innerText = "--"
 }
 
+//show results card
 function results(){
-  debugger;
+
   let questionItemEl = document.createElement("li");
   questionItemEl.className = "task-item";
   questionItemEl.setAttribute("data-task-id", "results");
@@ -103,11 +107,23 @@ function results(){
   workingHeader.innerText = "Final Results:"
   questionItemEl.appendChild(questionEl)
   tasksToDoEl.append(questionItemEl);
+  create
+  resultsScreen = true;
 }
 
 // self explanatory
 function questions(){
   // debugger;
+
+  if (resultsScreen){
+
+    let taskSelected = document.querySelector(
+      ".task-item[data-task-id='results']"
+    );
+
+    taskSelected.remove();
+    resultsScreen = false;
+  }
   console.log(score)
   if(index > 4){
     gameOver()
@@ -155,30 +171,14 @@ let createTaskActions = function (index) {
 
   let currentBank = shuffle(AnswerBank[index])
 
-  // create edit button
-  let answerAButton = document.createElement("button");
-  answerAButton.textContent = currentBank[0];
-  answerAButton.className = "btn A-btn";
-  answerAButton.setAttribute("data-task-id", index);
-  actionContainerEl.appendChild(answerAButton);
-  // create delete button
-  let answerBButton = document.createElement("button");
-  answerBButton.textContent = currentBank[1]
-  answerBButton.className = "btn B-btn";
-  answerBButton.setAttribute("data-task-id", index);
-  actionContainerEl.appendChild(answerBButton);
-
-  let answerCButton = document.createElement("button");
-  answerCButton.textContent = currentBank[2]
-  answerCButton.className = "btn C-btn";
-  answerCButton.setAttribute("data-task-id", index);
-  actionContainerEl.appendChild(answerCButton);
-  
-  let answerDButton = document.createElement("button");
-  answerDButton.textContent = currentBank[3]
-  answerDButton.className = "btn D-btn";
-  answerDButton.setAttribute("data-task-id", index);
-  actionContainerEl.appendChild(answerDButton);
+  //create all buttons in one loop
+  for (let i = 0; i < currentBank.length; i++) {
+    let answerButton = document.createElement("button");
+        answerButton.textContent = currentBank[i];
+        answerButton.className = "btn " +questionBank.letter[i]+ "-btn";
+        answerButton.setAttribute("data-task-id", index);
+        actionContainerEl.appendChild(answerButton);
+  }
   return actionContainerEl;
 };
 
