@@ -3,7 +3,8 @@ let interval;
 let index = 0;
 let timer = 60;
 let score= 0;
-let resultsScreen = false;
+// let resultsScreen = false;
+let leaderboardsRm = false;
 // set questionBank object
 let questionBank = {
   questions: ["Which one of these logs content to the console?", "what does CSS stand for?", "which one shows a prompt for the user?", "which one would I  use to get a decimal bewteen 0 and 1?", "freebee: whos the best?"],
@@ -89,6 +90,7 @@ function updateTimer(){
 // start the interval for the timer function and game
 function startGame(){
   startBtn.disabled = true
+  leaderboardsBtn.disabled = true
   interval = setInterval(updateTimer, 1000);
   questions();
 }
@@ -135,8 +137,7 @@ function results(){
   workingHeader.innerText = "Final Results:"
   questionItemEl.appendChild(questionEl)
   tasksToDoEl.append(questionItemEl);
-  resultsScreen = true;
-  // debugger;
+  // resultsScreen = true;
   let taskActionsEl = createTaskActions(0,"results")
   questionItemEl.appendChild(taskActionsEl);
 }
@@ -144,15 +145,26 @@ function results(){
 // self explanatory
 function questions(){
 
-  if (resultsScreen){
+  // if (resultsScreen){
 
-    let taskSelected = document.querySelector(
-      ".task-item[data-task-id='results']"
-    );
+  //   let taskSelected = document.querySelector(
+  //     ".task-item[data-task-id='results']"
+  //   );
 
-    taskSelected.remove();
-    resultsScreen = false;
-  }
+  //   taskSelected.remove();
+  //   resultsScreen = false;
+  // }
+   if(leaderboardsRm){
+
+    for (let i = 0; i < namesArray.length; i++) {
+      let taskSelected = document.querySelector(
+        ".task-item[data-task-id='leaderboards']"
+      );
+
+      taskSelected.remove();
+      leaderboardsRm = false;
+    }
+  } 
   console.log(score)
   if(index > 4){
     gameOver()
@@ -193,9 +205,9 @@ function questions(){
   // console.log(questionBank.questions[index],questionBank.number[index],questionBank.answers[index])
 }
 
-function leaderboardsScreen(type){
-  debugger;
-  
+function leaderboardsScreen(type){ 
+  leaderboardsBtn.disabled = true; 
+  startBtn.disabled = false;
   if(type == "results"){
     let taskSelected = document.querySelector(
       ".task-item[data-task-id='"+type+"']"
@@ -209,18 +221,15 @@ function leaderboardsScreen(type){
 
   for (let i = 0; i < namesArray.length; i++) {
     let questionItemEl = document.createElement("li");
-  questionItemEl.className = "task-item";
-  questionItemEl.setAttribute("data-task-id", leaderboards);
-  let questionEl = document.createElement("div");
-  questionEl.className = "task-info";
-  questionEl.innerHTML ="<h3 class='task-name'>"+namesArray[i]+"</h3><span class='task-type'>"+scoresArray[i]+"</span>";
-  questionItemEl.appendChild(questionEl)
-  tasksToDoEl.append(questionItemEl);
+    questionItemEl.className = "task-item";
+    questionItemEl.setAttribute("data-task-id", "leaderboards");
+    let questionEl = document.createElement("div");
+    questionEl.className = "task-info";
+    questionEl.innerHTML ="<h3 class='task-name'>"+namesArray[i]+"</h3><span class='task-type'>"+scoresArray[i]+"</span>";
+    questionItemEl.appendChild(questionEl)
+    tasksToDoEl.append(questionItemEl);
   }
-  
-
-  
-
+  leaderboardsRm = true;
 }
 
 let createTaskActions = function (index, type) {
@@ -261,7 +270,6 @@ let taskButtonHandler = function (event) {
   console.log(targetEl);
 
   if(targetEl.matches(".S-btn")){
-    debugger;
     let playerRecordValue = document.querySelector("input[name='name-field']").value;
     namesArray.push(playerRecordValue)
     scoresArray.push(score)
