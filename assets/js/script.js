@@ -73,7 +73,7 @@ function questions(){
 
 
   if(index > 0) {
-    debugger;
+    
     let prevIndex = index - 1;
     console.log(".task-item[data-task-id='" + prevIndex + "']")
     var taskSelected = document.querySelector(
@@ -101,9 +101,9 @@ function questions(){
  
 
 
-  console.log(questionBank.questions[index],questionBank.number[index],questionBank.answers[index])
-  index ++
-  console.log(questionBank.questions[index],questionBank.number[index],questionBank.answers[index])
+  // console.log(questionBank.questions[index],questionBank.number[index],questionBank.answers[index])
+  // index ++
+  // console.log(questionBank.questions[index],questionBank.number[index],questionBank.answers[index])
 }
 
 var createTaskActions = function (index) {
@@ -147,8 +147,20 @@ var taskButtonHandler = function (event) {
   console.log(targetEl);
 
   if (targetEl.matches(".A-btn") || targetEl.matches(".B-btn") || targetEl.matches(".C-btn") || targetEl.matches(".D-btn")  ){
-    console.log("boop!")
-    questions()
+    // debugger;
+    console
+    console.log(targetEl.textContent)
+    console.log(questionBank.answers[index])
+    if(targetEl.textContent == questionBank.answers[index]){
+      console.log("its a goal!")
+      index ++
+      questions()
+    }
+    else{
+      timer -= 10
+      index ++
+      questions()
+    }
   }
 
   // if (targetEl.matches(".edit-btn")) {
